@@ -2,8 +2,10 @@ package classes;
 
 public enum StatusEnum {
 	
-	DEVOLVIDOM,
+	DEVOLVIDO,
 	
-	ATRASADO
+	ATRASADO,
+	
+	NO_PRAZO
 
 }

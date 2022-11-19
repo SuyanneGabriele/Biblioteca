@@ -8,8 +8,10 @@ public abstract class Item {
 	private int anoLancamento;
 	private String editora;
 	private String edicao;
+	private int tempoReservaDias;
 
-	public Item(int id, String titulo, String autor, int anoLancamento, String editora, String edicao) {
+	public Item(int id, String titulo, String autor, int anoLancamento, String editora, String edicao,
+			int tempoReservaDias) {
 		super();
 		this.id = id;
 		this.titulo = titulo;
@@ -17,6 +19,7 @@ public abstract class Item {
 		this.anoLancamento = anoLancamento;
 		this.editora = editora;
 		this.edicao = edicao;
+		this.tempoReservaDias = tempoReservaDias;
 	}
 
 	public int getId() {
@@ -65,6 +68,14 @@ public abstract class Item {
 
 	public void setEdicao(String edicao) {
 		this.edicao = edicao;
+	}
+
+	public int getTempoReservaDias() {
+		return tempoReservaDias;
+	}
+
+	public void setTempoReservaDias(int tempoReservaDias) {
+		this.tempoReservaDias = tempoReservaDias;
 	}
 
 }

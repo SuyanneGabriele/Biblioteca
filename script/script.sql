@@ -1,73 +1,121 @@
--- https://www.w3schools.com/SQl/sql_create_db.asp
-CREATE DATABASE library;
+CREATE DATABASE biblioteca;
 
--- https://www.w3schools.com/SQl/sql_create_table.asp
--- https://data.world/alexandra/bohemian-literature/workspace/file?filename=bohemian_literature.csv
-CREATE TABLE library.book(
-	idbook INT NOT NULL AUTO_INCREMENT,
-	title VARCHAR(255) NOT NULL,
-	author VARCHAR(255) NOT NULL,
-	dayreserve INT DEFAULT 5,
-	PRIMARY KEY (idbook)
+CREATE TABLE biblioteca.livro(
+	id_livro INT NOT NULL AUTO_INCREMENT,
+	titulo VARCHAR(255) NOT NULL,
+	autor VARCHAR(255) NOT NULL,
+	ano_lancamento int,
+	editora varchar(255),
+	edicao varchar(255),
+	tempoReservaDias INT DEFAULT 5,
+	PRIMARY KEY (id_livro)
+);
+CREATE TABLE biblioteca.revista(
+	id_revista INT NOT NULL AUTO_INCREMENT,
+	titulo VARCHAR(255) NOT NULL,
+	autor VARCHAR(255) NOT NULL,
+	ano_lancamento int,
+	editora varchar(255),
+	edicao varchar(255),
+	tempoReservaDias INT DEFAULT 5,
+	PRIMARY KEY (id_revista)
+);
+CREATE TABLE biblioteca.periodico(
+	id_periodico INT NOT NULL AUTO_INCREMENT,
+	titulo VARCHAR(255) NOT NULL,
+	autor VARCHAR(255) NOT NULL,
+	ano_lancamento int,
+	editora varchar(255),
+	edicao varchar(255),
+	tempoReservaDias INT DEFAULT 5,
+	PRIMARY KEY (id_periodico)
 );
 
-INSERT INTO library.book(idbook, author, title) VALUES(1, 'Paul Deitel', 'Java How to program');
-INSERT INTO library.book(idbook, author, title) VALUES(2, 'Acker Kathy', 'Blood And Guts In High School');
-INSERT INTO library.book(idbook, author, title) VALUES(3, 'Acker Kathy', 'Empire Of The Senseless');
-INSERT INTO library.book(idbook, author, title) VALUES(4, 'Acker Kathy', 'Great Expectations');
-INSERT INTO library.book(idbook, author, title) VALUES(5, 'Acker Kathy and McKenzie Wark', 'Im Very Intro You: Correspondence 1965-1996');
-INSERT INTO library.book(idbook, author, title) VALUES(6, 'Acker Kathy', 'In Memoriam To Identity');
-INSERT INTO library.book(idbook, author, title) VALUES(7, 'Acker Kathy', 'Literal Madness: Three Novels');
-INSERT INTO library.book(idbook, author, title) VALUES(8, 'Acker Kathy', 'My Mother: Demonology');
-INSERT INTO library.book(idbook, author, title) VALUES(9, 'Acker Kathy', 'Pussy King Of The Pirates');
-INSERT INTO library.book(idbook, author, title) VALUES(10, 'Acosta Oscar Zeta', 'Revolt Of The Cockroach People');
-INSERT INTO library.book(idbook, author, title) VALUES(11, 'Aes-Nihil Jon', 'William S. Burroughs In The Dreamachine');
-INSERT INTO library.book(idbook, author, title) VALUES(12, 'Allen Donald', 'Poetics of the New American Poetry');
-
-CREATE TABLE library.magazine(
-	idmagazine INT NOT NULL AUTO_INCREMENT,
-	title VARCHAR(255) NOT NULL,
-	edition VARCHAR(255) NOT NULL,
-	dayreserve INT DEFAULT 3,
-	PRIMARY KEY (idmagazine)
+CREATE TABLE biblioteca.acervo(
+	id_acervo INT NOT NULL AUTO_INCREMENT,
+	id_item INT NOT NULL,
+	tipo_item VARCHAR(255) NOT NULL,
+	PRIMARY KEY (id_acervo)
 );
 
-INSERT INTO library.magazine(idmagazine, title, edition) VALUES(1, 'SQL Magazine', 'Volume 1');
-
-CREATE TABLE library.collection(
-	idcollection INT NOT NULL AUTO_INCREMENT,
-	iditem INT NOT NULL,
-	typecollection VARCHAR(255) NOT NULL,
-	PRIMARY KEY (idcollection)
+CREATE TABLE biblioteca.pessoa(
+	id_pessoa INT NOT NULL AUTO_INCREMENT,
+	nome VARCHAR(255) NOT NULL,
+	data_nascimento date,
+	documento varchar(20),
+	telefone varchar(20),
+	email varchar(200),
+	data_cadastro date,
+	endereco varchar(200),
+	numero_endereco int,
+	PRIMARY KEY (id_pessoa)
 );
 
-INSERT INTO library.collection(idcollection, iditem, typecollection) VALUES(1, 1, 'book');
-INSERT INTO library.collection(idcollection, iditem, typecollection) VALUES(2, 1, 'magazine');
-
--- userSys (user system)
-CREATE TABLE library.userSys(
-	iduser INT NOT NULL AUTO_INCREMENT,
-	firstname VARCHAR(255) NOT NULL,
-	lastname VARCHAR(255) NOT NULL,
-	PRIMARY KEY (iduser)
+CREATE TABLE biblioteca.cliente(
+	id_cliente INT NOT NULL AUTO_INCREMENT,
+	id_pessoa int not null,
+	cod_registro int,
+	PRIMARY KEY (id_cliente),
+	CONSTRAINT fk_cliente_id_pessoa FOREIGN KEY (id_pessoa) REFERENCES biblioteca.pessoa (id_pessoa)
 );
 
-INSERT INTO library.userSys(iduser, firstname, lastname) VALUES(1, 'Everton', 'Pereira');
-INSERT INTO library.userSys(iduser, firstname, lastname) VALUES(2, 'Richard', 'Matthew Stallman');
-INSERT INTO library.userSys(iduser, firstname, lastname) VALUES(3, 'Linus', 'Tolvads');
-INSERT INTO library.userSys(iduser, firstname, lastname) VALUES(4, 'Roberto', 'Carlos');
-
--- https://dev.mysql.com/doc/refman/8.0/en/date-and-time-types.html
--- https://www.w3schools.com/mysql/mysql_foreignkey.asp
--- https://dev.mysql.com/doc/refman/5.6/en/create-table-foreign-keys.html
--- https://www.softwaretestinghelp.com/mysql-foreign-key-constraint/
-CREATE TABLE library.loan(
-	idloan INT NOT NULL AUTO_INCREMENT,
-	idtuser INT NOT NULL,
-	idtcollection INT NOT NULL,
-	loandate DATETIME NOT NULL,
-	PRIMARY KEY (idloan),
-	FOREIGN KEY (idtuser) REFERENCES userSys(iduser),
-	FOREIGN KEY (idtcollection) REFERENCES collection(idcollection)
+CREATE TABLE biblioteca.funcionario(
+	id_funcionario INT NOT NULL AUTO_INCREMENT,
+	id_pessoa int not null,
+	cod_funcionario int,
+	PRIMARY KEY (id_funcionario),
+	CONSTRAINT fk_funcionario_id_pessoa FOREIGN KEY (id_pessoa) REFERENCES biblioteca.pessoa (id_pessoa)
 );
+
+CREATE TABLE biblioteca.emprestimo(
+	id_emprestimo INT NOT NULL AUTO_INCREMENT,
+	id_cliente INT NOT NULL,
+	id_funcionario int not null,
+	id_acervo INT NOT NULL,
+	data_inicio DATE NOT NULL,
+	data_devolucao DATE,
+	status varchar(20),
+	PRIMARY KEY (id_emprestimo),
+	CONSTRAINT fk_emprestimo_id_cliente FOREIGN KEY (id_cliente) REFERENCES biblioteca.cliente (id_cliente),
+	CONSTRAINT fk_emprestimo_id_funcionario FOREIGN KEY (id_funcionario) REFERENCES biblioteca.funcionario (id_funcionario),
+	CONSTRAINT fk_emprestimo_id_acervo FOREIGN KEY (id_acervo) REFERENCES biblioteca.acervo (id_acervo)
+);
+
+
+-----------INSERT LIVRO----------
+insert into biblioteca.livro (titulo, autor, ano_lancamento, editora, edicao) values ('Harry Potter 1', 'JK Rowling', 1900, 'Editora abc', 'edicao 1');
+insert into biblioteca.livro (titulo, autor, ano_lancamento, editora, edicao) values ('Harry Potter 2', 'JK Rowling', 1901, 'Editora abc', 'edicao 1');
+insert into biblioteca.livro (titulo, autor, ano_lancamento, editora, edicao) values ('Harry Potter 3', 'JK Rowling', 1902, 'Editora abc', 'edicao 1');
+
+-----------INSERT REVISTA----------
+insert into biblioteca.revista (titulo, autor, ano_lancamento, editora, edicao) values ('Revistinha avon 1', 'Avon', 1900, 'Editora abc', 'edicao 1');
+insert into biblioteca.revista (titulo, autor, ano_lancamento, editora, edicao) values ('Revistinha avon 2', 'Avon', 1901, 'Editora abc', 'edicao 1');
+insert into biblioteca.revista (titulo, autor, ano_lancamento, editora, edicao) values ('Revistinha avon 3', 'Avon', 1902, 'Editora abc', 'edicao 1');
+
+-----------INSERT PERIODICO--------
+insert into biblioteca.periodico (titulo, autor, ano_lancamento, editora, edicao) values ('periodico 1', 'periodico', 1900, 'Editora abc', 'edicao 1');
+insert into biblioteca.periodico (titulo, autor, ano_lancamento, editora, edicao) values ('periodico 2', 'periodico', 1901, 'Editora abc', 'edicao 1');
+insert into biblioteca.periodico (titulo, autor, ano_lancamento, editora, edicao) values ('periodico 3', 'periodico', 1902, 'Editora abc', 'edicao 1');
+
+
+-----------INSERT ACERVO------------
+insert into biblioteca.acervo (id_item, tipo_item) values (1, 'Livro');
+insert into biblioteca.acervo (id_item, tipo_item) values (1, 'Revista');
+insert into biblioteca.acervo (id_item, tipo_item) values (1, 'Periodico');
+
+-----------INSERT PESSOA------------
+insert into pessoa (nome, data_nascimento, documento, telefone, email, data_cadastro, endereco, numero_endereco) 
+values ('Kauê Fábio Jesus', 20/04/1980, '748.029.674-62', '(44) 3857-1019', 'kauefabiojesus@flama.biz', 19/11/2022, 'Rua Nova Zelândia', 108);
+insert into pessoa (nome, data_nascimento, documento, telefone, email, data_cadastro, endereco, numero_endereco) 
+values ('Tomás Eduardo Jesus', 14/08/1978, '732.387.543-94', '(19) 3926-5834', 'tomas-jesus99@yahoo.com .br', 19/11/2022, 'Rua da Savana', 472);
+
+-----------INSERT CLIENTE-----------
+insert into cliente (id_pessoa, cod_registro) VALUES (2, 101);
+
+-----------INSERT FUNCIONARIO-------
+insert into funcionario (id_pessoa, cod_funcionario) VALUES (1, 101);
+
+-----------INSERT EMPRESTIMO--------
+insert into emprestimo (id_cliente, id_funcionario, id_acervo, data_inicio, data_devolucao, status) values 
+(1, 1, 1, 19/11/2022, null, 'NO PRAZO');
 

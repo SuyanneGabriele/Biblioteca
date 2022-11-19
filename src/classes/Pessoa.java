@@ -2,7 +2,7 @@ package classes;
 
 import java.util.Date;
 
-public class Pessoa {
+public abstract class Pessoa {
 
 	private int id;
 	private String primeiroNome;
@@ -13,11 +13,27 @@ public class Pessoa {
 	private String email;
 	private Date dataCadastro;
 	private String endereco;
+	private int nmrEndereco;
 
 	public Pessoa(String primeiroNome, String ultimoNome) {
 		super();
 		this.primeiroNome = primeiroNome;
 		this.ultimoNome = ultimoNome;
+	}
+
+	public Pessoa(int id, String primeiroNome, String ultimoNome, Date dataNascimento, String documento,
+			String telefone, String email, Date dataCadastro, String endereco, int nmrEndereco) {
+		super();
+		this.id = id;
+		this.primeiroNome = primeiroNome;
+		this.ultimoNome = ultimoNome;
+		this.dataNascimento = dataNascimento;
+		this.documento = documento;
+		this.telefone = telefone;
+		this.email = email;
+		this.dataCadastro = dataCadastro;
+		this.endereco = endereco;
+		this.nmrEndereco = nmrEndereco;
 	}
 
 	public int getId() {
@@ -92,4 +108,12 @@ public class Pessoa {
 		this.endereco = endereco;
 	}
 
+	public int getNmrEndereco() {
+		return nmrEndereco;
+	}
+
+	public void setNmrEndereco(int nmrEndereco) {
+		this.nmrEndereco = nmrEndereco;
+	}
+	
 }
