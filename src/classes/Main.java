@@ -6,7 +6,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		LivroDAO dao = new LivroDAO();
-		Livro livro = dao.buscarLivro(1);
+		Livro livro = dao.buscarLivro(2);
 
 		if (livro != null) {
 			System.out.println(livro.getId());
