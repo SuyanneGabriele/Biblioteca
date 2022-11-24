@@ -1,8 +1,8 @@
 package classes;
 
-import java.util.Date;
+import java.sql.Date;
 
-public abstract class Pessoa {
+public class Pessoa {
 
 	private int id;
 	private String primeiroNome;
@@ -14,6 +14,8 @@ public abstract class Pessoa {
 	private Date dataCadastro;
 	private String endereco;
 	private int nmrEndereco;
+	
+	public Pessoa () {}
 
 	public Pessoa(String primeiroNome, String ultimoNome) {
 		super();

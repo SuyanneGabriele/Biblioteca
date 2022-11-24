@@ -56,8 +56,7 @@ public class EmprestimoDAO {
 //				rs.getInt("id_cliente");
 //				rs.getInt("id_funcionario");
 
-					AcervoDAO acervoDao = new AcervoDAO();
-					emprestimo.setAcervo(acervoDao.buscarAcervo(rs.getInt("id_acervo")));
+					emprestimo.setAcervo(AcervoDAO.buscarAcervo(rs.getInt("id_acervo")));
 
 					emprestimo.setDataInicio(rs.getDate("data_inicio"));
 					emprestimo.setDataFim(rs.getDate("data_devolucao"));
