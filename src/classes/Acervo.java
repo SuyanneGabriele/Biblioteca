@@ -5,6 +5,8 @@ public class Acervo {
 	private int id;
 	private String tipoItem;
 	private int idItem;
+	
+	public Acervo() {}
 
 	public Acervo(int id, String tipoItem, int idItem) {
 		super();

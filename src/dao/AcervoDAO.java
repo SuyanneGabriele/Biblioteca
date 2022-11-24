@@ -9,8 +9,8 @@ import connectionFactory.ConnectionFactory;
 
 public class AcervoDAO {
 
-	public void adicionarAcervo(Acervo acervo) {
-		String sql = "INSERT INTO acervo (tipoItem, id_item) values (?, ?)";
+	public static void adicionarAcervo(Acervo acervo) {
+		String sql = "INSERT INTO acervo (tipo_item, id_item) values (?, ?)";
 
 		try {
 			PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql);
@@ -30,7 +30,7 @@ public class AcervoDAO {
 		}
 	}
 
-	public Acervo buscarAcervo(int id) {
+	public static Acervo buscarAcervo(int id) {
 		String sql = "select id_acervo, id_item, tipo_item from acervo where id_acervo = "
 				+ id;
 
@@ -64,7 +64,7 @@ public class AcervoDAO {
 		return null;
 	}
 
-	public void editarAcervo(Acervo acervo) {
+	public static void editarAcervo(Acervo acervo) {
 		String sql = "update acervo set id_item = ?, tipo_item = ? where id_acervo = ?";
 		try {
 			PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql);
@@ -85,7 +85,7 @@ public class AcervoDAO {
 		}
 	}
 
-	public void deletarAcervo(int id) {
+	public static void deletarAcervo(int id) {
 		String sql = "delete from acervo where id_acervo = ?";
 
 		try {
