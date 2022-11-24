@@ -6,22 +6,22 @@ import java.sql.SQLException;
 
 import classes.Emprestimo;
 import connectionFactory.ConnectionFactory;
+import enumeration.StatusEnum;
 
 public class EmprestimoDAO {
-	
 
 	public void adicionarEmprestimo(Emprestimo emprestimo) {
-		String sql = "INSERT INTO emprestimo (titulo, autor, ano_lancamento, editora, edicao, tempoReservaDias) values (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO emprestimo (id_cliente, id_funcionario, id_acervo, data_inicio, data_devolucao, status) values (?, ?, ?, ?, ?, ?)";
 
 		try {
 			PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql);
 
-			stmt.setString(1, emprestimo.getTitulo());
-			stmt.setString(2, emprestimo.getAutor());
-			stmt.setInt(3, emprestimo.getAnoLancamento());
-			stmt.setString(4, emprestimo.getEditora());
-			stmt.setString(5, emprestimo.getEdicao());
-			stmt.setInt(6, emprestimo.getTempoReservaDias());
+			stmt.setInt(1, emprestimo.getCliente().getId());
+			stmt.setInt(2, emprestimo.getFuncionario().getId());
+			stmt.setInt(3, emprestimo.getAcervo().getId());
+			stmt.setDate(4, emprestimo.getDataInicio());
+			stmt.setDate(5, emprestimo.getDataFim());
+			stmt.setString(6, emprestimo.getStatus().name());
 
 			stmt.execute();
 			stmt.close();
@@ -36,7 +36,7 @@ public class EmprestimoDAO {
 	}
 
 	public Emprestimo buscarEmprestimo(int id) {
-		String sql = "select id_emprestimo, titulo, autor, ano_lancamento, editora, edicao, tempoReservaDias from emprestimo where id_emprestimo = "
+		String sql = "select id_emprestimo, id_cliente, id_funcionario, id_acervo, data_inicio, data_devolucao, status from emprestimo where id_emprestimo = "
 				+ id;
 
 		try {
@@ -50,9 +50,20 @@ public class EmprestimoDAO {
 
 			if (numberRegisters > 0) {
 				while (rs.next()) {
-					return new Emprestimo(rs.getInt("id_emprestimo"), rs.getString("titulo"), rs.getString("autor"),
-							rs.getInt("ano_lancamento"), rs.getString("editora"), rs.getString("edicao"), //
-							rs.getInt("tempoReservaDias"));
+					Emprestimo emprestimo = new Emprestimo();
+					emprestimo.setId(rs.getInt("id_emprestimo"));
+
+//				rs.getInt("id_cliente");
+//				rs.getInt("id_funcionario");
+
+					AcervoDAO acervoDao = new AcervoDAO();
+					emprestimo.setAcervo(acervoDao.buscarAcervo(rs.getInt("id_acervo")));
+
+					emprestimo.setDataInicio(rs.getDate("data_inicio"));
+					emprestimo.setDataFim(rs.getDate("data_devolucao"));
+					emprestimo.setStatus(StatusEnum.valueOf(rs.getString("status")));
+
+					return emprestimo;
 				}
 				System.out.println("");
 			} else {
@@ -72,17 +83,12 @@ public class EmprestimoDAO {
 	}
 
 	public void editarEmprestimo(Emprestimo emprestimo) {
-		String sql = "update emprestimo set titulo = ?, autor = ?, ano_lancamento = ?, editora = ?, edicao = ?, "
-				+ " tempoReservaDias = ? where id_emprestimo = ?";
+		String sql = "update emprestimo set data_devolucao = ?, status = ? where id_emprestimo = ?";
 		try {
 			PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql);
 
-			stmt.setString(1, emprestimo.getTitulo());
-			stmt.setString(2, emprestimo.getAutor());
-			stmt.setInt(3, emprestimo.getAnoLancamento());
-			stmt.setString(4, emprestimo.getEditora());
-			stmt.setString(5, emprestimo.getEdicao());
-			stmt.setInt(6, emprestimo.getTempoReservaDias());
+			stmt.setDate(1, emprestimo.getDataFim());
+			stmt.setString(2, emprestimo.getStatus().name());
 			stmt.setInt(7, emprestimo.getId());
 
 			stmt.execute();

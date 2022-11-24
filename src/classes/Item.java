@@ -9,6 +9,8 @@ public abstract class Item {
 	private String editora;
 	private String edicao;
 	private int tempoReservaDias;
+	
+	public Item() {}
 
 	public Item(int id, String titulo, String autor, int anoLancamento, String editora, String edicao,
 			int tempoReservaDias) {

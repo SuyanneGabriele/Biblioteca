@@ -1,4 +1,4 @@
-package classes;
+package enumeration;
 
 public enum StatusEnum {
 	
