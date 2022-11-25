@@ -11,16 +11,16 @@ public class Funcionario extends Pessoa {
 
 	
 
-	public Funcionario(int id, String primeiroNome, String ultimoNome, Date dataNascimento, String documento,
+	public Funcionario(int id, String nome, Date dataNascimento, String documento,
 			String telefone, String email, Date dataCadastro, String endereco, int nmrEndereco, int codFuncionario, int idFuncionario) {
-		super(id, primeiroNome, ultimoNome, dataNascimento, documento, telefone, email, dataCadastro, endereco,
+		super(id, nome, dataNascimento, documento, telefone, email, dataCadastro, endereco,
 				nmrEndereco);
 		this.codFuncionario = codFuncionario;
 		this.idFuncionario = idFuncionario;
 	}
 
-	public Funcionario(String primeiroNome, String ultimoNome, int codFuncionario) {
-		super(primeiroNome, ultimoNome);
+	public Funcionario(String nome, int codFuncionario) {
+		super(nome);
 		this.codFuncionario = codFuncionario;
 	}
 	

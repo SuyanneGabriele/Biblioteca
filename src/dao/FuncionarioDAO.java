@@ -52,8 +52,7 @@ public class FuncionarioDAO {
 					funcionario.setIdFuncionario(rs.getInt("id_funcionario")); 
 					funcionario.setCodFuncionario(rs.getInt("cod_funcionario"));
 					Pessoa pessoa = PessoaDAO.buscarPessoa(rs.getInt("id_pessoa"));
-					funcionario.setPrimeiroNome(pessoa.getPrimeiroNome());
-					funcionario.setUltimoNome(pessoa.getUltimoNome());
+					funcionario.setNome(pessoa.getNome());
 					funcionario.setDataNascimento(pessoa.getDataNascimento());
 					funcionario.setDocumento(pessoa.getDocumento());
 					funcionario.setTelefone(pessoa.getTelefone());

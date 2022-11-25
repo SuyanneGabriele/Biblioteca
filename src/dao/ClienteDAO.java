@@ -22,7 +22,6 @@ public class ClienteDAO {
 			stmt.setInt(2, cliente.getCodRegistro());
 			
 			
-			
 			stmt.execute();
 			stmt.close();
 			ConnectionFactory.getConnection().close();
@@ -54,8 +53,7 @@ public class ClienteDAO {
 					cliente.setIdCliente(rs.getInt("id_cliente")); 
 					cliente.setCodRegistro(rs.getInt("cod_registro"));
 					Pessoa pessoa = PessoaDAO.buscarPessoa(rs.getInt("id_pessoa"));
-					cliente.setPrimeiroNome(pessoa.getPrimeiroNome());
-					cliente.setUltimoNome(pessoa.getUltimoNome());
+					cliente.setNome(pessoa.getNome());
 					cliente.setDataNascimento(pessoa.getDataNascimento());
 					cliente.setDocumento(pessoa.getDocumento());
 					cliente.setTelefone(pessoa.getTelefone());
