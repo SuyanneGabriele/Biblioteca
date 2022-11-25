@@ -7,20 +7,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import classes.Livro;
-import classes.Periodico;
 import classes.Pessoa;
-import classes.Revista;
-import dao.LivroDAO;
-import dao.PeriodicoDAO;
-import dao.RevistaDAO;
+import dao.PessoaDAO;
+import dao.ClienteDAO;
+import dao.FuncionarioDAO;
 import enumeration.TipoItemEnum;
+import enumeration.TipoPessoaEnum;
 
 public class CadastroPessoaPainel extends JPanel {
 	
@@ -122,61 +124,96 @@ public class CadastroPessoaPainel extends JPanel {
 		numEnderecoTextField.setColumns(15);
 		add(numEnderecoTextField);
 		
+		JComboBox<TipoPessoaEnum> TipoPessoaComboBox = new JComboBox<TipoPessoaEnum>();
+		TipoPessoaComboBox.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		TipoPessoaComboBox.setModel(new DefaultComboBoxModel<TipoPessoaEnum>(TipoPessoaEnum.values()));
+		TipoPessoaComboBox.setBounds(10, 269, 185, 21);
+		add(TipoPessoaComboBox);
+		
+		JLabel tipoDadoLabel = new JLabel("Tipo de dado");
+		tipoDadoLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		tipoDadoLabel.setBounds(10, 246, 119, 13);
+		add(tipoDadoLabel);
+		
+		JCheckBox inserePessoaCheckBox = new JCheckBox("Inserir a Pessoa");
+		inserePessoaCheckBox.setBackground(new Color(255, 255, 255));
+		inserePessoaCheckBox.setBounds(227, 270, 143, 21);
+		add(inserePessoaCheckBox);
+		
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.setFont(new Font("Times New Roman", Font.BOLD, 14));
 		btnSalvar.setBounds(10, 312, 85, 21);
 		btnSalvar.addActionListener(new ActionListener() {
-
+		
 			public void actionPerformed(ActionEvent e) {
-
-				if (tipoItemComboBox.getSelectedItem().equals(TipoItemEnum.LIVRO)) {
-					Livro livro = createLivro(tituloTextField.getText(), autorLabel.getText(),
-							edicaoTextField.getText(), editoraTextField.getText(),
-							Integer.parseInt(tempoReservaTextField.getText()),
-							Integer.parseInt(anoLancamentoTextField.getText()));
-
-					boolean registroInserido = LivroDAO.adicionarLivro(livro);
-					informaUsuario(registroInserido, TipoItemEnum.LIVRO);
-					if (registroInserido && insereAcervoCheckBox.isSelected()) {
-						inserirLivroAcervo();
+	
+				if (TipoPessoaComboBox.getSelectedCliente().equals(TipoPessoaEnum.Cliente)) {
+					Cliente Cliente = createCliente(primeiroNomeTextField.getText(), ultimoNomeTextField.getText(),
+							dataNascimentoTextField.getText(), documentoTextField.getText(), telefoneTextField.getText(), emailTextField.getText(),
+							dataCadastroTextField.getText(), enderecoTextField.getText(), numEnderecoTextField.getText());
+	
+					boolean registroCliente = ClienteDAO.adicionarCliente(cliente);
+					informaUsuario(registroCliente, TipoPessoaEnum.Cliente);
+					if (registroCliente && inserePessoaCheckBox.isSelected()) {
+						inserirPessoaCliente();
 					}
-				} else if (tipoItemComboBox.getSelectedItem().equals(TipoItemEnum.REVISTA)) {
-					Revista revista = createRevista(tituloTextField.getText(), autorLabel.getText(),
-							edicaoTextField.getText(), editoraTextField.getText(),
-							Integer.parseInt(tempoReservaTextField.getText()),
-							Integer.parseInt(anoLancamentoTextField.getText()));
-
-					boolean registroInserido = RevistaDAO.adicionarRevista(revista);
-					informaUsuario(registroInserido, TipoItemEnum.REVISTA);
-					if (registroInserido && insereAcervoCheckBox.isSelected()) {
-						inserirRevistaAcervo();
+				} else if (TipoPessoaComboBox.getSelectedFuncionario().equals(TipoPessoaEnum.Funcionario)) {
+					Funcionario funcionario = createFuncionario(primeiroNomeTextField.getText(), ultimoNomeTextField.getText(),
+							dataNascimentoTextField.getText(), documentoTextField.getText(), telefoneTextField.getText(), emailTextField.getText(),
+							dataCadastroTextField.getText(), enderecoTextField.getText(), numEnderecoTextField.getText());
+	
+					boolean registroFuncionario = FuncionarioDAO.adicionarFuncionario(funcionario);
+					informaUsuario(registroFuncionario, TipoPessoaEnum.Funcionario);
+					if (registroFuncionario && inserePessoaCheckBox.isSelected()) {
+						inserirPessoaFuncionario();
 					}
-				} else if (tipoItemComboBox.getSelectedItem().equals(TipoItemEnum.PERIODICO)) {
-					Periodico periodico = createPeriodico(tituloTextField.getText(), autorLabel.getText(),
-							edicaoTextField.getText(), editoraTextField.getText(),
-							Integer.parseInt(tempoReservaTextField.getText()),
-							Integer.parseInt(anoLancamentoTextField.getText()));
-
-					boolean registroInserido = PeriodicoDAO.adicionarPeriodico(periodico);
-					informaUsuario(registroInserido, TipoItemEnum.PERIODICO);
-					if (registroInserido && insereAcervoCheckBox.isSelected()) {
-						inserirPeriodicoAcervo();
-					}
-				}
-
-				limparCampos(tituloTextField, anoLancamentoTextField, tempoReservaTextField, autorTextField,
-						editoraTextField, //
-						edicaoTextField);
+				} 
+	
+				limparCampos(primeiroNomeTextField, ultimoNomeTextField, dataNascimentoTextField, documentoTextField, telefoneTextField, 
+						emailTextField,	dataCadastroTextField, enderecoTextField, numEnderecoTextField);
 			}
+		
 		});
 		add(btnSalvar);
-		
+
+				
+	}
+	public void limparCampos(JTextField primeiroNomeTextField, JTextField ultimoNomeTextField,
+			JTextField dataNascimentoTextField, JTextField documentoTextField, JTextField telefoneTextField, 
+			JTextField emailTextField, JTextField dataCadastroTextField, JTextField enderecoTextField, JTextField numEnderecoTextField) {
+		primeiroNomeTextField.setText("");
+		ultimoNomeTextField.setText("");
+		dataNascimentoTextField.setText("");
+		documentoTextField.setText("");
+		telefoneTextField.setText("");
+		emailTextField.setText("");
+		dataCadastroTextField.setText("");
+		enderecoTextField.setText("");
+		numEnderecoTextField.setText("");
 	}
 	
 	
+	public void inserirPessoaCliente() {
+		Cliente clienteInserido = ClienteDAO.buscarUltimoClienteInserido();
+		if (clienteInserido != null) {
+			Pessoa pessoa = new Pessoa();
+			pessoa.setIdPessoa(clienteInserido.getId());
+			pessoa.setTipoPessoa(TipoPessoaEnum.Cliente.toString());
+			PessoaDAO.adicionarPessoa(pessoa);
+		}
+	}
 	
+	public void inserirPessoaFuncionario() {
+		Funcionario funcionarioInserido = FuncionarioDAO.buscarUltimoFuncionarioInserido();
+		if (funcionarioInserido != null) {
+			Pessoa pessoa = new Pessoa();
+			pessoa.setIdPessoa(clienteInserido.getId());
+			pessoa.setTipoPessoa(TipoPessoaEnum.Funcionario.toString());
+			PessoaDAO.adicionarPessoa(pessoa);
+		}
+	}
 	
-	private Pessoa createPessoa(String primeiroNome, String ultimoNome, Date dataNascimento, String documento, String telefone, String email, 
+	private Pessoa createCliente(String primeiroNome, String ultimoNome, Date dataNascimento, String documento, String telefone, String email, 
 			Date dataCadastro, String endereco, int numeroEndereco) {
 		
 		
@@ -193,6 +230,25 @@ public class CadastroPessoaPainel extends JPanel {
 		
 
 		return pessoa;
+	}
+	
+	public void inserirPessoa() {
+		Pessoa pessoaInserido = PessoaDAO.buscarUltimaPessoaInserido();
+		if (pessoaInserido != null) {
+			Pessoa pessoa = new Pessoa();
+			pessoa.setIdPessoa(pessoaInserido.getId());
+			pessoa.adicionarPessoa(pessoa);
+		}
+	}
+	
+	public void informaUsuario(boolean resultado, TipoPessoaEnum tipoPessoaEnum) {
+		if (resultado) {
+			JOptionPane.showMessageDialog(null, "Registro do tipo " + tipoPessoaEnum + " inserido com sucesso!", "Aviso",
+					JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, "Registro do tipo " + tipoPessoaEnum + " não foi inserido.", "Aviso",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 
 }

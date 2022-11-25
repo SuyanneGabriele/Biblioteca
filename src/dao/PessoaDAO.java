@@ -10,8 +10,13 @@ import connectionFactory.ConnectionFactory;
 
 public class PessoaDAO {
 	
+<<<<<<< HEAD
+		public static boolean adicionarPessoa(Pessoa pessoa) {
+			String sql = "INSERT INTO pessoa (primeiro_nome, ultimo_nome, data_nascimento, documento, telefone, e-amil, data_cadastro, endereco,numero_endereco) vaule (?,?,?,?,?,?,?,?)";
+=======
 		public void adicionarPessoa(Pessoa pessoa) {
 			String sql = "INSERT INTO pessoa (nome, data_nascimento, documento, telefone, email, data_cadastro, endereco,numero_endereco) vaule (?,?,?,?,?,?,?,?)";
+>>>>>>> 7854427a29c240be85906ab372b34072c7df7e1b
 			
 			try {
 				PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql);
@@ -37,6 +42,7 @@ public class PessoaDAO {
 			}catch(Exception e ) {
 				System.out.println(e.getMessage());
 			}
+			return false;
 		}
 		public static Pessoa buscarPessoa(int id) {
 			String sql = "select id_pessoa, nome, data_nascimento, documento, telefone, email, data_cadastro, endereco, numero_endereco from pessoa where id_pessoa = " + id;
@@ -117,5 +123,37 @@ public class PessoaDAO {
 			}catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
+		}
+		public static Pessoa buscarUltimaPessoaInserido() {
+			String sql = "select id_pessoa,primeiro_nome, ultimo_nome, data_nascimento, documento, telefone, e-amil, data_cadastro, endereco, numero_endereco from pessoa order by id_pessoa desc ";
+			try {
+				PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql, 
+						ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+				ResultSet rs = stmt.executeQuery(sql);
+				
+				rs.last();
+				int numberRegisters = rs.getRow();
+				rs.beforeFirst();
+				
+				if (numberRegisters > 0) {
+					while (rs.next()){
+						return new Pessoa(rs.getInt("id_pessoa"), rs.getString("primeiro_nome"), rs.getString("ultimo_nome"), rs.getDate("data_nascimento"),
+								rs.getString("documento"), rs.getString("telefone"), rs.getString("e-amil"), rs.getDate("data_cadastro"), rs.getString("endereco"), rs.getInt("numero_endereco"));
+					}
+					System.out.println("");
+				} else {
+					System.out.println(String.format("- Without results for id %d -"));
+					return null;
+				}
+				stmt.close();
+				ConnectionFactory.getConnection().close();
+			}catch (SQLException e) {
+				System.out.println("SQLException: " + e.getMessage());
+				System.out.println("SQLState: " + e.getSQLState());
+				System.out.println("VendorError: " + e.getErrorCode());
+			}catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+			return null;
 		}
 }

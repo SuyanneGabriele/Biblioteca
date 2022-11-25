@@ -106,5 +106,7 @@ public class Pessoa {
 	public void setNmrEndereco(int nmrEndereco) {
 		this.nmrEndereco = nmrEndereco;
 	}
+
+	
 	
 }
