@@ -14,9 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import classes.Acervo;
 import classes.Livro;
 import classes.Periodico;
 import classes.Revista;
+import dao.AcervoDAO;
 import dao.LivroDAO;
 import dao.PeriodicoDAO;
 import dao.RevistaDAO;
@@ -146,32 +148,33 @@ public class EdicaoItemPanel extends JPanel {
 		salvarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (tituloTextField.getText().equals("") || autorLabel.getText().equals("") || //
+				if (idItemTextField.getText().equals("") || tituloTextField.getText().equals("")
+						|| autorLabel.getText().equals("") || //
 						edicaoTextField.getText().equals("") || editoraTextField.getText().equals("") || //
 						tempoReservaTextField.getText().equals("") || anoLancamentoTextField.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Há campos em branco.", "Aviso",
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					if (tipoItemEnumComboBox.getSelectedItem().equals(TipoItemEnum.LIVRO)) {
-						Livro livro = createLivro(tituloTextField.getText(), autorLabel.getText(),
-								edicaoTextField.getText(), editoraTextField.getText(),
-								Integer.parseInt(tempoReservaTextField.getText()),
+						Livro livro = createLivro(Integer.parseInt(idItemTextField.getText()),
+								tituloTextField.getText(), autorLabel.getText(), edicaoTextField.getText(),
+								editoraTextField.getText(), Integer.parseInt(tempoReservaTextField.getText()),
 								Integer.parseInt(anoLancamentoTextField.getText()));
 
 						boolean registroEditado = LivroDAO.editarLivro(livro);
 						informaUsuario(registroEditado, TipoItemEnum.LIVRO);
 					} else if (tipoItemEnumComboBox.getSelectedItem().equals(TipoItemEnum.REVISTA)) {
-						Revista revista = createRevista(tituloTextField.getText(), autorLabel.getText(),
-								edicaoTextField.getText(), editoraTextField.getText(),
-								Integer.parseInt(tempoReservaTextField.getText()),
+						Revista revista = createRevista(Integer.parseInt(idItemTextField.getText()),
+								tituloTextField.getText(), autorLabel.getText(), edicaoTextField.getText(),
+								editoraTextField.getText(), Integer.parseInt(tempoReservaTextField.getText()),
 								Integer.parseInt(anoLancamentoTextField.getText()));
 
 						boolean registroEditado = RevistaDAO.editarRevista(revista);
 						informaUsuario(registroEditado, TipoItemEnum.REVISTA);
 					} else if (tipoItemEnumComboBox.getSelectedItem().equals(TipoItemEnum.PERIODICO)) {
-						Periodico periodico = createPeriodico(tituloTextField.getText(), autorLabel.getText(),
-								edicaoTextField.getText(), editoraTextField.getText(),
-								Integer.parseInt(tempoReservaTextField.getText()),
+						Periodico periodico = createPeriodico(Integer.parseInt(idItemTextField.getText()),
+								tituloTextField.getText(), autorLabel.getText(), edicaoTextField.getText(),
+								editoraTextField.getText(), Integer.parseInt(tempoReservaTextField.getText()),
 								Integer.parseInt(anoLancamentoTextField.getText()));
 
 						boolean registroEditado = PeriodicoDAO.editarPeriodico(periodico);
@@ -193,34 +196,28 @@ public class EdicaoItemPanel extends JPanel {
 		removerDoAcervoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (!idItemTextField.getText().equals("")) {
+				if (idItemTextField.getText().equals("")) {
 					validateIdItemTextField(idItemTextField);
 				} else {
 					if (tipoItemEnumComboBox.getSelectedItem().equals(TipoItemEnum.LIVRO)) {
-						Livro livro = LivroDAO.buscarLivro(Integer.parseInt(idItemTextField.getText()));
-						boolean registroEditado = LivroDAO.editarLivro(livro);
-						informaUsuario(registroEditado, TipoItemEnum.LIVRO);
+						Acervo acervo = AcervoDAO.buscarAcervoPorIdItemETipoDeItem(
+								Integer.parseInt(idItemTextField.getText()), TipoItemEnum.LIVRO.toString());
+						if (acervo != null) {
+							AcervoDAO.deletarAcervo(acervo.getId());
+						}
 					} else if (tipoItemEnumComboBox.getSelectedItem().equals(TipoItemEnum.REVISTA)) {
-						Revista revista = createRevista(tituloTextField.getText(), autorLabel.getText(),
-								edicaoTextField.getText(), editoraTextField.getText(),
-								Integer.parseInt(tempoReservaTextField.getText()),
-								Integer.parseInt(anoLancamentoTextField.getText()));
-
-						boolean registroEditado = RevistaDAO.editarRevista(revista);
-						informaUsuario(registroEditado, TipoItemEnum.REVISTA);
+						Acervo acervo = AcervoDAO.buscarAcervoPorIdItemETipoDeItem(
+								Integer.parseInt(idItemTextField.getText()), TipoItemEnum.REVISTA.toString());
+						if (acervo != null) {
+							AcervoDAO.deletarAcervo(acervo.getId());
+						}
 					} else if (tipoItemEnumComboBox.getSelectedItem().equals(TipoItemEnum.PERIODICO)) {
-						Periodico periodico = createPeriodico(tituloTextField.getText(), autorLabel.getText(),
-								edicaoTextField.getText(), editoraTextField.getText(),
-								Integer.parseInt(tempoReservaTextField.getText()),
-								Integer.parseInt(anoLancamentoTextField.getText()));
-
-						boolean registroEditado = PeriodicoDAO.editarPeriodico(periodico);
-						informaUsuario(registroEditado, TipoItemEnum.PERIODICO);
+						Acervo acervo = AcervoDAO.buscarAcervoPorIdItemETipoDeItem(
+								Integer.parseInt(idItemTextField.getText()), TipoItemEnum.PERIODICO.toString());
+						if (acervo != null) {
+							AcervoDAO.deletarAcervo(acervo.getId());
+						}
 					}
-
-					limparCampos(tituloTextField, anoLancamentoTextField, tempoReservaTextField, autorTextField,
-							editoraTextField, //
-							edicaoTextField, idItemTextField);
 				}
 			}
 
@@ -238,14 +235,24 @@ public class EdicaoItemPanel extends JPanel {
 					validateIdItemTextField(idItemTextField);
 				} else {
 					if (tipoItemEnumComboBox.getSelectedItem().equals(TipoItemEnum.LIVRO)) {
-						informaUsuario(LivroDAO.deletarLivro(Integer.parseInt(idItemTextField.getText())),
+						informaUsuarioExclusao(LivroDAO.deletarLivro(Integer.parseInt(idItemTextField.getText())),
 								TipoItemEnum.LIVRO);
+						limparCampos(tituloTextField, anoLancamentoTextField, tempoReservaTextField, autorTextField,
+								editoraTextField, //
+								edicaoTextField, idItemTextField);
 					} else if (tipoItemEnumComboBox.getSelectedItem().equals(TipoItemEnum.REVISTA)) {
-						informaUsuario(RevistaDAO.deletarRevista(Integer.parseInt(idItemTextField.getText())),
+						informaUsuarioExclusao(RevistaDAO.deletarRevista(Integer.parseInt(idItemTextField.getText())),
 								TipoItemEnum.REVISTA);
+						limparCampos(tituloTextField, anoLancamentoTextField, tempoReservaTextField, autorTextField,
+								editoraTextField, //
+								edicaoTextField, idItemTextField);
 					} else if (tipoItemEnumComboBox.getSelectedItem().equals(TipoItemEnum.PERIODICO)) {
-						informaUsuario(PeriodicoDAO.deletarPeriodico(Integer.parseInt(idItemTextField.getText())),
+						informaUsuarioExclusao(
+								PeriodicoDAO.deletarPeriodico(Integer.parseInt(idItemTextField.getText())),
 								TipoItemEnum.PERIODICO);
+						limparCampos(tituloTextField, anoLancamentoTextField, tempoReservaTextField, autorTextField,
+								editoraTextField, //
+								edicaoTextField, idItemTextField);
 					}
 
 				}
@@ -331,9 +338,20 @@ public class EdicaoItemPanel extends JPanel {
 		}
 	}
 
-	private Revista createRevista(String titulo, String autor, String edicao, String editora, int tempoReserva,
+	public void informaUsuarioExclusao(boolean resultado, TipoItemEnum tipoItemEnum) {
+		if (resultado) {
+			JOptionPane.showMessageDialog(null, "Registro do tipo " + tipoItemEnum + " excluido com sucesso!", "Aviso",
+					JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, "Não foi possivel excluir o registro do tipo " + tipoItemEnum + ".",
+					"Aviso", JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+
+	private Revista createRevista(int id, String titulo, String autor, String edicao, String editora, int tempoReserva,
 			int anoLancamento) {
 		Revista revista = new Revista();
+		revista.setId(id);
 		revista.setTitulo(titulo);
 		revista.setAutor(autor);
 		revista.setEdicao(edicao);
@@ -344,9 +362,10 @@ public class EdicaoItemPanel extends JPanel {
 		return revista;
 	}
 
-	private Livro createLivro(String titulo, String autor, String edicao, String editora, int tempoReserva,
+	private Livro createLivro(int id, String titulo, String autor, String edicao, String editora, int tempoReserva,
 			int anoLancamento) {
 		Livro livro = new Livro();
+		livro.setId(id);
 		livro.setTitulo(titulo);
 		livro.setAutor(autor);
 		livro.setEdicao(edicao);
@@ -357,9 +376,10 @@ public class EdicaoItemPanel extends JPanel {
 		return livro;
 	}
 
-	private Periodico createPeriodico(String titulo, String autor, String edicao, String editora, int tempoReserva,
-			int anoLancamento) {
+	private Periodico createPeriodico(int id, String titulo, String autor, String edicao, String editora,
+			int tempoReserva, int anoLancamento) {
 		Periodico periodico = new Periodico();
+		periodico.setId(id);
 		periodico.setTitulo(titulo);
 		periodico.setAutor(autor);
 		periodico.setEdicao(edicao);

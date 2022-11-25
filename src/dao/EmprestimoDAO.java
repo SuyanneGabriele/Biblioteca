@@ -4,13 +4,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import classes.Acervo;
+import classes.Cliente;
 import classes.Emprestimo;
+import classes.Funcionario;
 import connectionFactory.ConnectionFactory;
 import enumeration.StatusEnum;
 
 public class EmprestimoDAO {
 
-	public void adicionarEmprestimo(Emprestimo emprestimo) {
+	public static void adicionarEmprestimo(Emprestimo emprestimo) {
 		String sql = "INSERT INTO emprestimo (id_cliente, id_funcionario, id_acervo, data_inicio, data_devolucao, status) values (?, ?, ?, ?, ?, ?)";
 
 		try {
@@ -35,7 +38,7 @@ public class EmprestimoDAO {
 		}
 	}
 
-	public Emprestimo buscarEmprestimo(int id) {
+	public static Emprestimo buscarEmprestimo(int id) {
 		String sql = "select id_emprestimo, id_cliente, id_funcionario, id_acervo, data_inicio, data_devolucao, status from emprestimo where id_emprestimo = "
 				+ id;
 
@@ -53,10 +56,25 @@ public class EmprestimoDAO {
 					Emprestimo emprestimo = new Emprestimo();
 					emprestimo.setId(rs.getInt("id_emprestimo"));
 
-//				rs.getInt("id_cliente");
-//				rs.getInt("id_funcionario");
-
-					emprestimo.setAcervo(AcervoDAO.buscarAcervo(rs.getInt("id_acervo")));
+					ClienteDAO clientedao = new ClienteDAO();
+					Cliente cliente = clientedao.buscarCliente(rs.getInt("id_cliente"));
+					if (cliente == null) {
+						return null;
+					}
+					emprestimo.setCliente(cliente);
+					
+					FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
+					Funcionario funcionario = funcionarioDAO.buscarFuncionario(rs.getInt("id_funcionario"));
+					if (funcionario == null) {
+						return null;
+					}
+					emprestimo.setFuncionario(funcionario);
+					
+					Acervo acervo = AcervoDAO.buscarAcervo(rs.getInt("id_acervo"));
+					if (acervo == null) {
+						return null;
+					}
+					emprestimo.setAcervo(acervo);
 
 					emprestimo.setDataInicio(rs.getDate("data_inicio"));
 					emprestimo.setDataFim(rs.getDate("data_devolucao"));
@@ -81,7 +99,7 @@ public class EmprestimoDAO {
 		return null;
 	}
 
-	public void editarEmprestimo(Emprestimo emprestimo) {
+	public static void editarEmprestimo(Emprestimo emprestimo) {
 		String sql = "update emprestimo set data_devolucao = ?, status = ? where id_emprestimo = ?";
 		try {
 			PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql);
@@ -102,7 +120,7 @@ public class EmprestimoDAO {
 		}
 	}
 
-	public void deletarEmprestimo(int id) {
+	public static void deletarEmprestimo(int id) {
 		String sql = "delete from emprestimo where id_emprestimo = ?";
 
 		try {

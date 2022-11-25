@@ -31,8 +31,7 @@ public class AcervoDAO {
 	}
 
 	public static Acervo buscarAcervo(int id) {
-		String sql = "select id_acervo, id_item, tipo_item from acervo where id_acervo = "
-				+ id;
+		String sql = "select id_acervo, id_item, tipo_item from acervo where id_acervo = " + id;
 
 		try {
 			PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql,
@@ -47,7 +46,6 @@ public class AcervoDAO {
 				while (rs.next()) {
 					return new Acervo(rs.getInt("id_acervo"), rs.getString("tipo_item"), rs.getInt("id_item"));
 				}
-				System.out.println("");
 			} else {
 				System.out.println(String.format("- Without results for id %d -", id));
 				return null;
@@ -103,6 +101,40 @@ public class AcervoDAO {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public static Acervo buscarAcervoPorIdItemETipoDeItem(int idItem, String tipoItem) {
+		String sql = "select id_acervo, id_item, tipo_item from acervo where id_item = " + idItem + " and "
+				+ "UPPER(tipo_item) =  \"" + tipoItem + "\" ";
+
+		try {
+			PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql,
+					ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+			ResultSet rs = stmt.executeQuery(sql);
+
+			rs.last();
+			int numberRegisters = rs.getRow();
+			rs.beforeFirst();
+
+			if (numberRegisters > 0) {
+				while (rs.next()) {
+					return new Acervo(rs.getInt("id_acervo"), rs.getString("tipo_item"), rs.getInt("id_item"));
+				}
+			} else {
+				System.out.println("Nenhum registro foi encontrado");
+				return null;
+			}
+			stmt.close();
+			ConnectionFactory.getConnection().close();
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
 	}
 
 }
