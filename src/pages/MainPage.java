@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.text.ParseException;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 
@@ -32,7 +33,7 @@ public class MainPage extends JFrame {
 		});
 	}
 
-	public MainPage() {
+	public MainPage() throws ParseException {
 		setTitle("Biblioteca OnLine");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, 728, 490);
@@ -47,6 +48,7 @@ public class MainPage extends JFrame {
 		contentPane.add(tabbedPane);
 		tabbedPane.addTab("Cadastro de Item", new CadastroItemPanel());
 		tabbedPane.addTab("Edição de Item", new EdicaoItemPanel());
+		tabbedPane.addTab("Cadastro Emprestimo", new CadastroEmprestimoPanel());
 
 		cabecalhoPanel = new JPanel();
 		cabecalhoPanel.setBackground(new Color(0, 128, 255));

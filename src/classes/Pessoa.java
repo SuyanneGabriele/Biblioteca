@@ -5,8 +5,7 @@ import java.sql.Date;
 public class Pessoa {
 
 	private int id;
-	private String primeiroNome;
-	private String ultimoNome;
+	private String nome;
 	private Date dataNascimento;
 	private String documento;
 	private String telefone;
@@ -17,18 +16,16 @@ public class Pessoa {
 	
 	public Pessoa () {}
 
-	public Pessoa(String primeiroNome, String ultimoNome) {
+	public Pessoa(String nome) {
 		super();
-		this.primeiroNome = primeiroNome;
-		this.ultimoNome = ultimoNome;
+		this.nome = nome;
 	}
 
-	public Pessoa(int id, String primeiroNome, String ultimoNome, Date dataNascimento, String documento,
+	public Pessoa(int id, String nome, Date dataNascimento, String documento,
 			String telefone, String email, Date dataCadastro, String endereco, int nmrEndereco) {
 		super();
 		this.id = id;
-		this.primeiroNome = primeiroNome;
-		this.ultimoNome = ultimoNome;
+		this.nome = nome;
 		this.dataNascimento = dataNascimento;
 		this.documento = documento;
 		this.telefone = telefone;
@@ -46,20 +43,12 @@ public class Pessoa {
 		this.id = id;
 	}
 
-	public String getPrimeiroNome() {
-		return primeiroNome;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setPrimeiroNome(String primeiroNome) {
-		this.primeiroNome = primeiroNome;
-	}
-
-	public String getUltimoNome() {
-		return ultimoNome;
-	}
-
-	public void setUltimoNome(String ultimoNome) {
-		this.ultimoNome = ultimoNome;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public Date getDataNascimento() {

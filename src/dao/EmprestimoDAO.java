@@ -13,22 +13,24 @@ import enumeration.StatusEnum;
 
 public class EmprestimoDAO {
 
-	public static void adicionarEmprestimo(Emprestimo emprestimo) {
+	public static boolean adicionarEmprestimo(Emprestimo emprestimo) {
 		String sql = "INSERT INTO emprestimo (id_cliente, id_funcionario, id_acervo, data_inicio, data_devolucao, status) values (?, ?, ?, ?, ?, ?)";
 
 		try {
 			PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql);
 
-			stmt.setInt(1, emprestimo.getCliente().getId());
-			stmt.setInt(2, emprestimo.getFuncionario().getId());
+			stmt.setInt(1, emprestimo.getCliente().getIdCliente());
+			stmt.setInt(2, emprestimo.getFuncionario().getIdFuncionario());
 			stmt.setInt(3, emprestimo.getAcervo().getId());
 			stmt.setDate(4, emprestimo.getDataInicio());
 			stmt.setDate(5, emprestimo.getDataFim());
 			stmt.setString(6, emprestimo.getStatus().name());
 
-			stmt.execute();
-			stmt.close();
-			ConnectionFactory.getConnection().close();
+			if (stmt.executeUpdate() == 1) {
+				return true;
+			} else {
+				return false;
+			}
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
 			System.out.println("SQLState: " + e.getSQLState());
@@ -36,6 +38,7 @@ public class EmprestimoDAO {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		return false;
 	}
 
 	public static Emprestimo buscarEmprestimo(int id) {

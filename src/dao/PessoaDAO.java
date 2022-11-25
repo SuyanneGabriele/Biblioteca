@@ -11,20 +11,19 @@ import connectionFactory.ConnectionFactory;
 public class PessoaDAO {
 	
 		public void adicionarPessoa(Pessoa pessoa) {
-			String sql = "INSERT INTO pessoa (primeiro_nome, ultimo_nome, data_nascimento, documento, telefone, e-amil, data_cadastro, endereco,numero_endereco) vaule (?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO pessoa (nome, data_nascimento, documento, telefone, email, data_cadastro, endereco,numero_endereco) vaule (?,?,?,?,?,?,?,?)";
 			
 			try {
 				PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql);
 				
-				stmt.setString(1, pessoa.getPrimeiroNome());
-				stmt.setString(2, pessoa.getUltimoNome());
-				stmt.setDate(3, pessoa.getDataNascimento());
-				stmt.setString(4, pessoa.getDocumento());
-				stmt.setString(5, pessoa.getTelefone());
-				stmt.setString(6, pessoa.getEmail());
-				stmt.setDate(7, pessoa.getDataCadastro());
-				stmt.setString(8, pessoa.getEndereco());
-				stmt.setInt(9, pessoa.getNmrEndereco());
+				stmt.setString(1, pessoa.getNome());
+				stmt.setDate(2, pessoa.getDataNascimento());
+				stmt.setString(3, pessoa.getDocumento());
+				stmt.setString(4, pessoa.getTelefone());
+				stmt.setString(5, pessoa.getEmail());
+				stmt.setDate(6, pessoa.getDataCadastro());
+				stmt.setString(7, pessoa.getEndereco());
+				stmt.setInt(8, pessoa.getNmrEndereco());
 				
 				stmt.execute();
 				stmt.close();
@@ -40,7 +39,7 @@ public class PessoaDAO {
 			}
 		}
 		public static Pessoa buscarPessoa(int id) {
-			String sql = "select id_pessoa,primeiro_nome, ultimo_nome, data_nascimento, documento, telefone, e-amil, data_cadastro, endereco, numero_endereco from pessoa where id_pessoa = " + id;
+			String sql = "select id_pessoa, nome, data_nascimento, documento, telefone, email, data_cadastro, endereco, numero_endereco from pessoa where id_pessoa = " + id;
 			
 			try {
 				PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql, 
@@ -53,8 +52,8 @@ public class PessoaDAO {
 				
 				if (numberRegisters > 0) {
 					while (rs.next()){
-						return new Pessoa(rs.getInt("id_pessoa"), rs.getString("primeiro_nome"), rs.getString("ultimo_nome"), rs.getDate("data_nascimento"),
-								rs.getString("documento"), rs.getString("telefone"), rs.getString("e-amil"), rs.getDate("data_cadastro"), rs.getString("endereco"), rs.getInt("numero_endereco"));
+						return new Pessoa(rs.getInt("id_pessoa"), rs.getString("nome"), rs.getDate("data_nascimento"),
+								rs.getString("documento"), rs.getString("telefone"), rs.getString("email"), rs.getDate("data_cadastro"), rs.getString("endereco"), rs.getInt("numero_endereco"));
 					}
 					System.out.println("");
 				} else {
@@ -74,20 +73,19 @@ public class PessoaDAO {
 		}
 		
 		public void editarPessoa(Pessoa pessoa) {
-			String sql = "update pessoa set primeiro_nome = ?, ultimo_nome = ?, data_nascimento = ?, documento = ?, telefone = ?, e-amil = ?, data_cadastro = ?, endereco = ?, numero_endereco =? where id_pessoa = ? ";
+			String sql = "update pessoa set nome = ?, data_nascimento = ?, documento = ?, telefone = ?, email = ?, data_cadastro = ?, endereco = ?, numero_endereco =? where id_pessoa = ? ";
 			
 			try { 
 				PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql);
 				
-				stmt.setString(1, pessoa.getPrimeiroNome());
-				stmt.setString(2, pessoa.getUltimoNome());
-				stmt.setDate(3, pessoa.getDataNascimento());
-				stmt.setString(4, pessoa.getDocumento());
-				stmt.setString(5, pessoa.getTelefone());
-				stmt.setString(6, pessoa.getEmail());
-				stmt.setDate(7, pessoa.getDataCadastro());
-				stmt.setString(8, pessoa.getEndereco());
-				stmt.setInt(9, pessoa.getNmrEndereco());
+				stmt.setString(1, pessoa.getNome());
+				stmt.setDate(2, pessoa.getDataNascimento());
+				stmt.setString(3, pessoa.getDocumento());
+				stmt.setString(4, pessoa.getTelefone());
+				stmt.setString(5, pessoa.getEmail());
+				stmt.setDate(6, pessoa.getDataCadastro());
+				stmt.setString(7, pessoa.getEndereco());
+				stmt.setInt(8, pessoa.getNmrEndereco());
 				
 				stmt.execute();
 				stmt.close();
