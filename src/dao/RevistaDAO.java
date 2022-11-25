@@ -126,7 +126,7 @@ public class RevistaDAO {
 	}
 
 	public static Revista buscarUltimaRevistaInserida() {
-		String sql = "select id_revista, titulo, autor, ano_lancamento, editora, edicao, tempoReservaDias from revista order by id_revista";
+		String sql = "select id_revista, titulo, autor, ano_lancamento, editora, edicao, tempoReservaDias from revista order by id_revista desc";
 
 		try {
 			PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql,

@@ -119,7 +119,7 @@ public class CadastroItemPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				if (tipoItemComboBox.getSelectedItem().equals(TipoItemEnum.LIVRO)) {
-					Livro livro = createLivro(tituloTextField.getText(), autorLabel.getText(),
+					Livro livro = createLivro(tituloTextField.getText(), autorTextField.getText(),
 							edicaoTextField.getText(), editoraTextField.getText(),
 							Integer.parseInt(tempoReservaTextField.getText()),
 							Integer.parseInt(anoLancamentoTextField.getText()));
@@ -130,7 +130,7 @@ public class CadastroItemPanel extends JPanel {
 						inserirLivroAcervo();
 					}
 				} else if (tipoItemComboBox.getSelectedItem().equals(TipoItemEnum.REVISTA)) {
-					Revista revista = createRevista(tituloTextField.getText(), autorLabel.getText(),
+					Revista revista = createRevista(tituloTextField.getText(), autorTextField.getText(),
 							edicaoTextField.getText(), editoraTextField.getText(),
 							Integer.parseInt(tempoReservaTextField.getText()),
 							Integer.parseInt(anoLancamentoTextField.getText()));
@@ -141,7 +141,7 @@ public class CadastroItemPanel extends JPanel {
 						inserirRevistaAcervo();
 					}
 				} else if (tipoItemComboBox.getSelectedItem().equals(TipoItemEnum.PERIODICO)) {
-					Periodico periodico = createPeriodico(tituloTextField.getText(), autorLabel.getText(),
+					Periodico periodico = createPeriodico(tituloTextField.getText(), autorTextField.getText(),
 							edicaoTextField.getText(), editoraTextField.getText(),
 							Integer.parseInt(tempoReservaTextField.getText()),
 							Integer.parseInt(anoLancamentoTextField.getText()));
