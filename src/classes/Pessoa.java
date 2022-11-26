@@ -55,8 +55,8 @@ public class Pessoa {
 		return dataNascimento;
 	}
 
-	public void setDataNascimento(Date dataNascimento) {
-		this.dataNascimento = dataNascimento;
+	public void setDataNascimento(Date dataNascimento2) {
+		this.dataNascimento = dataNascimento2;
 	}
 
 	public String getDocumento() {

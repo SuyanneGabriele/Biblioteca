@@ -120,7 +120,8 @@ public class PessoaDAO {
 			}
 		}
 		public static Pessoa buscarUltimaPessoaInserido() {
-			String sql = "select id_pessoa,nome, data_nascimento, documento, telefone, e-amil, data_cadastro, endereco, numero_endereco from pessoa order by id_pessoa desc ";
+			String sql = "select id_pessoa,nome, data_nascimento, documento, telefone, email, data_cadastro, endereco, numero_endereco from pessoa order by id_pessoa desc ";
+
 			try {
 				PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql, 
 						ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -133,7 +134,7 @@ public class PessoaDAO {
 				if (numberRegisters > 0) {
 					while (rs.next()){
 						return new Pessoa(rs.getInt("id_pessoa"), rs.getString("nome"), rs.getDate("data_nascimento"),
-								rs.getString("documento"), rs.getString("telefone"), rs.getString("e-amil"), rs.getDate("data_cadastro"), rs.getString("endereco"), rs.getInt("numero_endereco"));
+								rs.getString("documento"), rs.getString("telefone"), rs.getString("email"), rs.getDate("data_cadastro"), rs.getString("endereco"), rs.getInt("numero_endereco"));
 					}
 					System.out.println("");
 				} else {
