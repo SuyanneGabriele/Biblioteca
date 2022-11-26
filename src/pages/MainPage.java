@@ -49,6 +49,7 @@ public class MainPage extends JFrame {
 		tabbedPane.addTab("Cadastro de Item", new CadastroItemPanel());
 		tabbedPane.addTab("Edição de Item", new EdicaoItemPanel());
 		tabbedPane.addTab("Cadastro Emprestimo", new CadastroEmprestimoPanel());
+		tabbedPane.addTab("Cadastro Pessoa", new CadastroPessoaPainel());
 
 		cabecalhoPanel = new JPanel();
 		cabecalhoPanel.setBackground(new Color(0, 128, 255));

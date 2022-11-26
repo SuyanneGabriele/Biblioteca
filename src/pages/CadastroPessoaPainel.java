@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import classes.Cliente;
+import classes.Funcionario;
 import classes.Pessoa;
 import dao.PessoaDAO;
 import dao.ClienteDAO;
@@ -33,25 +35,15 @@ public class CadastroPessoaPainel extends JPanel {
 		setBackground(new Color(51,0,0));
 		setLayout(null);
 		
-		JLabel primeiroNomeLabel = new JLabel("Primeiro Nome");
-		primeiroNomeLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		primeiroNomeLabel.setBounds(100,100,200, 20);
-		add(primeiroNomeLabel);
+		JLabel nomeLabel = new JLabel("Nome");
+		nomeLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		nomeLabel.setBounds(100,100,200, 20);
+		add(nomeLabel);
 		
-		JTextField primeiroNomeTextField = new JTextField();
-		primeiroNomeTextField.setBounds(100,100,200, 20);
-		primeiroNomeTextField.setColumns(15);
-		add(primeiroNomeTextField);
-		
-		JLabel ultimoNomeLabel = new JLabel("Sobrenome Nome");
-		ultimoNomeLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
-		ultimoNomeLabel.setBounds(400,100,200, 20);
-		add(ultimoNomeLabel);
-		
-		JTextField ultimoNomeTextField = new JTextField();
-		ultimoNomeTextField.setBounds(400,100,200, 20);
-		ultimoNomeTextField.setColumns(15);
-		add(ultimoNomeTextField);
+		JTextField nomeTextField = new JTextField();
+		nomeTextField.setBounds(100,100,200, 20);
+		nomeTextField.setColumns(15);
+		add(nomeTextField);
 		
 		JLabel dataNascimentoLabel = new JLabel("Data de Nascimento");
 		dataNascimentoLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
@@ -148,7 +140,7 @@ public class CadastroPessoaPainel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 	
 				if (TipoPessoaComboBox.getSelectedCliente().equals(TipoPessoaEnum.Cliente)) {
-					Cliente Cliente = createCliente(primeiroNomeTextField.getText(), ultimoNomeTextField.getText(),
+					Cliente Cliente = createCliente(nomeTextField.getText(),
 							dataNascimentoTextField.getText(), documentoTextField.getText(), telefoneTextField.getText(), emailTextField.getText(),
 							dataCadastroTextField.getText(), enderecoTextField.getText(), numEnderecoTextField.getText());
 	
@@ -158,7 +150,7 @@ public class CadastroPessoaPainel extends JPanel {
 						inserirPessoaCliente();
 					}
 				} else if (TipoPessoaComboBox.getSelectedFuncionario().equals(TipoPessoaEnum.Funcionario)) {
-					Funcionario funcionario = createFuncionario(primeiroNomeTextField.getText(), ultimoNomeTextField.getText(),
+					Funcionario funcionario = createFuncionario(nomeTextField.getText(),
 							dataNascimentoTextField.getText(), documentoTextField.getText(), telefoneTextField.getText(), emailTextField.getText(),
 							dataCadastroTextField.getText(), enderecoTextField.getText(), numEnderecoTextField.getText());
 	
@@ -169,7 +161,7 @@ public class CadastroPessoaPainel extends JPanel {
 					}
 				} 
 	
-				limparCampos(primeiroNomeTextField, ultimoNomeTextField, dataNascimentoTextField, documentoTextField, telefoneTextField, 
+				limparCampos(nomeTextField, dataNascimentoTextField, documentoTextField, telefoneTextField, 
 						emailTextField,	dataCadastroTextField, enderecoTextField, numEnderecoTextField);
 			}
 		
@@ -178,11 +170,10 @@ public class CadastroPessoaPainel extends JPanel {
 
 				
 	}
-	public void limparCampos(JTextField primeiroNomeTextField, JTextField ultimoNomeTextField,
-			JTextField dataNascimentoTextField, JTextField documentoTextField, JTextField telefoneTextField, 
-			JTextField emailTextField, JTextField dataCadastroTextField, JTextField enderecoTextField, JTextField numEnderecoTextField) {
-		primeiroNomeTextField.setText("");
-		ultimoNomeTextField.setText("");
+	public void limparCampos(JTextField nomeTextField, JTextField dataNascimentoTextField, JTextField documentoTextField, 
+			JTextField telefoneTextField, JTextField emailTextField, JTextField dataCadastroTextField, 
+			JTextField enderecoTextField, JTextField numEnderecoTextField) {
+		nomeTextField.setText("");
 		dataNascimentoTextField.setText("");
 		documentoTextField.setText("");
 		telefoneTextField.setText("");
@@ -213,13 +204,12 @@ public class CadastroPessoaPainel extends JPanel {
 		}
 	}
 	
-	private Pessoa createCliente(String primeiroNome, String ultimoNome, Date dataNascimento, String documento, String telefone, String email, 
-			Date dataCadastro, String endereco, int numeroEndereco) {
+	private Pessoa createCliente(String nome, String dataNascimento, String documento, String telefone, String email, 
+			String dataCadastro, String endereco, int numeroEndereco) {
 		
 		
 		Pessoa pessoa = new Pessoa();
-		pessoa.setPrimeiroNome(primeiroNome);
-		pessoa.setUltimoNome(ultimoNome);
+		pessoa.setNome(nome);
 		pessoa.setDataNascimento(dataNascimento);
 		pessoa.setDocumento(documento);
 		pessoa.setTelefone(telefone);
@@ -232,13 +222,22 @@ public class CadastroPessoaPainel extends JPanel {
 		return pessoa;
 	}
 	
-	public void inserirPessoa() {
-		Pessoa pessoaInserido = PessoaDAO.buscarUltimaPessoaInserido();
-		if (pessoaInserido != null) {
-			Pessoa pessoa = new Pessoa();
-			pessoa.setIdPessoa(pessoaInserido.getId());
-			pessoa.adicionarPessoa(pessoa);
-		}
+	private Pessoa createFuncionario(String nome, String dataNascimento, String documento, String telefone, String email, 
+			String dataCadastro, String endereco, int numeroEndereco) {
+		
+		
+		Pessoa pessoa = new Pessoa();
+		pessoa.setNome(nome);
+		pessoa.setDataNascimento(dataNascimento);
+		pessoa.setDocumento(documento);
+		pessoa.setTelefone(telefone);
+		pessoa.setEmail(email);
+		pessoa.setDataCadastro(dataCadastro);
+		pessoa.setEndereco(endereco);
+		pessoa.setNmrEndereco(numeroEndereco);
+		
+
+		return pessoa;
 	}
 	
 	public void informaUsuario(boolean resultado, TipoPessoaEnum tipoPessoaEnum) {
