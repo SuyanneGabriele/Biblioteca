@@ -10,13 +10,8 @@ import connectionFactory.ConnectionFactory;
 
 public class PessoaDAO {
 	
-<<<<<<< HEAD
 		public static boolean adicionarPessoa(Pessoa pessoa) {
-			String sql = "INSERT INTO pessoa (primeiro_nome, ultimo_nome, data_nascimento, documento, telefone, e-amil, data_cadastro, endereco,numero_endereco) vaule (?,?,?,?,?,?,?,?)";
-=======
-		public void adicionarPessoa(Pessoa pessoa) {
 			String sql = "INSERT INTO pessoa (nome, data_nascimento, documento, telefone, email, data_cadastro, endereco,numero_endereco) vaule (?,?,?,?,?,?,?,?)";
->>>>>>> 7854427a29c240be85906ab372b34072c7df7e1b
 			
 			try {
 				PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql);
@@ -125,7 +120,7 @@ public class PessoaDAO {
 			}
 		}
 		public static Pessoa buscarUltimaPessoaInserido() {
-			String sql = "select id_pessoa,primeiro_nome, ultimo_nome, data_nascimento, documento, telefone, e-amil, data_cadastro, endereco, numero_endereco from pessoa order by id_pessoa desc ";
+			String sql = "select id_pessoa,nome, data_nascimento, documento, telefone, e-amil, data_cadastro, endereco, numero_endereco from pessoa order by id_pessoa desc ";
 			try {
 				PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql, 
 						ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -137,7 +132,7 @@ public class PessoaDAO {
 				
 				if (numberRegisters > 0) {
 					while (rs.next()){
-						return new Pessoa(rs.getInt("id_pessoa"), rs.getString("primeiro_nome"), rs.getString("ultimo_nome"), rs.getDate("data_nascimento"),
+						return new Pessoa(rs.getInt("id_pessoa"), rs.getString("nome"), rs.getDate("data_nascimento"),
 								rs.getString("documento"), rs.getString("telefone"), rs.getString("e-amil"), rs.getDate("data_cadastro"), rs.getString("endereco"), rs.getInt("numero_endereco"));
 					}
 					System.out.println("");

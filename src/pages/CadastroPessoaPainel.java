@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import classes.Cliente;
+import classes.Funcionario;
 import classes.Pessoa;
 import dao.PessoaDAO;
 import dao.ClienteDAO;
@@ -147,17 +149,17 @@ public class CadastroPessoaPainel extends JPanel {
 		
 			public void actionPerformed(ActionEvent e) {
 	
-				if (TipoPessoaComboBox.getSelectedCliente().equals(TipoPessoaEnum.Cliente)) {
-					Cliente Cliente = createCliente(primeiroNomeTextField.getText(), ultimoNomeTextField.getText(),
+				if (TipoPessoaComboBox.getSelectedItem().equals(TipoPessoaEnum.Cliente)) {
+					Cliente cliente = createCliente(primeiroNomeTextField.getText(),
 							dataNascimentoTextField.getText(), documentoTextField.getText(), telefoneTextField.getText(), emailTextField.getText(),
 							dataCadastroTextField.getText(), enderecoTextField.getText(), numEnderecoTextField.getText());
 	
 					boolean registroCliente = ClienteDAO.adicionarCliente(cliente);
 					informaUsuario(registroCliente, TipoPessoaEnum.Cliente);
 					if (registroCliente && inserePessoaCheckBox.isSelected()) {
-						inserirPessoaCliente();
+//						inserirPessoaCliente();
 					}
-				} else if (TipoPessoaComboBox.getSelectedFuncionario().equals(TipoPessoaEnum.Funcionario)) {
+				} else if (TipoPessoaComboBox.getSelectedItem().equals(TipoPessoaEnum.Funcionario)) {
 					Funcionario funcionario = createFuncionario(primeiroNomeTextField.getText(), ultimoNomeTextField.getText(),
 							dataNascimentoTextField.getText(), documentoTextField.getText(), telefoneTextField.getText(), emailTextField.getText(),
 							dataCadastroTextField.getText(), enderecoTextField.getText(), numEnderecoTextField.getText());
@@ -165,7 +167,7 @@ public class CadastroPessoaPainel extends JPanel {
 					boolean registroFuncionario = FuncionarioDAO.adicionarFuncionario(funcionario);
 					informaUsuario(registroFuncionario, TipoPessoaEnum.Funcionario);
 					if (registroFuncionario && inserePessoaCheckBox.isSelected()) {
-						inserirPessoaFuncionario();
+//						inserirPessoaFuncionario();
 					}
 				} 
 	
@@ -193,33 +195,32 @@ public class CadastroPessoaPainel extends JPanel {
 	}
 	
 	
-	public void inserirPessoaCliente() {
-		Cliente clienteInserido = ClienteDAO.buscarUltimoClienteInserido();
-		if (clienteInserido != null) {
-			Pessoa pessoa = new Pessoa();
-			pessoa.setIdPessoa(clienteInserido.getId());
-			pessoa.setTipoPessoa(TipoPessoaEnum.Cliente.toString());
-			PessoaDAO.adicionarPessoa(pessoa);
-		}
-	}
+//	public void inserirPessoaCliente() {
+//		Cliente clienteInserido = ClienteDAO.buscarUltimoClienteInserido();
+//		if (clienteInserido != null) {
+//			Pessoa pessoa = new Pessoa();
+//			pessoa.setIdPessoa(clienteInserido.getId());
+//			pessoa.setTipoPessoa(TipoPessoaEnum.Cliente.toString());
+//			PessoaDAO.adicionarPessoa(pessoa);
+//		}
+//	}
+//	
+//	public void inserirPessoaFuncionario() {
+//		Funcionario funcionarioInserido = FuncionarioDAO.buscarUltimoFuncionarioInserido();
+//		if (funcionarioInserido != null) {
+//			Pessoa pessoa = new Pessoa();
+//			pessoa.setIdPessoa(clienteInserido.getId());
+//			pessoa.setTipoPessoa(TipoPessoaEnum.Funcionario.toString());
+//			PessoaDAO.adicionarPessoa(pessoa);
+//		}
+//	}
 	
-	public void inserirPessoaFuncionario() {
-		Funcionario funcionarioInserido = FuncionarioDAO.buscarUltimoFuncionarioInserido();
-		if (funcionarioInserido != null) {
-			Pessoa pessoa = new Pessoa();
-			pessoa.setIdPessoa(clienteInserido.getId());
-			pessoa.setTipoPessoa(TipoPessoaEnum.Funcionario.toString());
-			PessoaDAO.adicionarPessoa(pessoa);
-		}
-	}
-	
-	private Pessoa createCliente(String primeiroNome, String ultimoNome, Date dataNascimento, String documento, String telefone, String email, 
+	private Pessoa createCliente(String nome, Date dataNascimento, String documento, String telefone, String email, 
 			Date dataCadastro, String endereco, int numeroEndereco) {
 		
 		
 		Pessoa pessoa = new Pessoa();
-		pessoa.setPrimeiroNome(primeiroNome);
-		pessoa.setUltimoNome(ultimoNome);
+		pessoa.setNome(nome);
 		pessoa.setDataNascimento(dataNascimento);
 		pessoa.setDocumento(documento);
 		pessoa.setTelefone(telefone);

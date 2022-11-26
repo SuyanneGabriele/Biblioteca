@@ -12,7 +12,7 @@ public class ClienteDAO {
 	
 	
 	
-	public void adicionarClient(Cliente cliente) {
+	public static boolean adicionarClient(Cliente cliente) {
 		String sql = "INSERT INTO cliente (id_pessoa, cod_registro) vaule (?,?)";
 		
 		try {
@@ -22,9 +22,11 @@ public class ClienteDAO {
 			stmt.setInt(2, cliente.getCodRegistro());
 			
 			
-			stmt.execute();
-			stmt.close();
-			ConnectionFactory.getConnection().close();
+			if (stmt.executeUpdate() ==	1) {
+				return true;
+			} else {
+				return false;
+			}
 			
 		} catch(SQLException e) {
 			System.out.println("SQLExeption: " + e.getMessage());
@@ -34,6 +36,7 @@ public class ClienteDAO {
 		}catch(Exception e ) {
 			System.out.println(e.getMessage());
 		}
+		return false;
 	}
 	public Cliente buscarCliente(int id) {
 		String sql = "select id_cliente, id_pessoa, cod_registro from cliente where id_cliente = " + id;
